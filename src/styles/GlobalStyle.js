@@ -11,8 +11,9 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    color : ${props => props.theme.grayscaleC};
     background-color : ${props => props.theme.grayscaleB};
+    color : ${props => props.theme.grayscaleC};
+    font-family: "AppleSDGothicNeo", "Noto Sans KR", sans-serif;;
   }
 `;
 
