@@ -1,29 +1,31 @@
 import React from 'react';
 import styled from 'styled-components';
-import { theme, lightTheme, darkTheme } from '../../styles/theme';
 
 function Input({
-  placeholder,
-  type,
+  flex = 0,
+  type = 'text',
+  shape = 'solid',
+  size = 'medium',
+  color = 'primary',
+  status,
+  full = false,
   name,
-  shape,
-  size,
-  onChange,
-  disabled,
   value,
   defaultValue,
-  flex,
-  full,
+  onChange,
+  disabled,
+  placeholder,
 }) {
   return (
     // 인풋 Props
     <FlexLabel flex={flex}>
-      <SolidInput
-        className="input"
-        shape={shape}
-        size={size}
-        full={full}
+      <DefaultInput
         type={type}
+        dataShape={shape}
+        dataSize={size}
+        dataColor={color}
+        dataStatus={status}
+        dataFull={full}
         name={name}
         value={value}
         defaultValue={defaultValue}
@@ -37,56 +39,93 @@ function Input({
 
 /**
  * Input Props 정의
- * @property {string} shape - 인풋 모양 (solid, round)
- * @property {string} size - 인풋 크기 (small, medium, large)
- * @property {string} placeholder - 인풋 플레이스홀더
+ * @property {number} flex - 인풋 flex 값
  * @property {string} type - 인풋 타입
+ * @property {string} dataShape - 인풋 모양 (solid, round)
+ * @property {string} dataSize - 인풋 크기 (small, medium)
+ * @property {string} dataColor - 인풋 색상 (primary, secondary, neutral)
+ * @property {string} dataStatus - 인풋 상태 (default, error, done)
+ * @property {boolean} dataFull - 인풋 width 100%
  * @property {string} name - 인풋 이름
- * @property {function} onChange - 인풋 값 변경 이벤트
- * @property {boolean} disabled - 인풋 비활성화
  * @property {string} value - 인풋 값 (변경 불가)
  * @property {string} defaultValue - 인풋 기본 값 (변경 가능)
+ * @property {function} onChange - 인풋 값 변경 이벤트
+ * @property {boolean} disabled - 인풋 비활성화
+ * @property {string} placeholder - 인풋 플레이스홀더
  */
 
-// Input의 기본 props 값 설정
-Input.defaultProps = {
-  shape: 'solid',
-  size: 'medium',
-  type: 'text',
-  flex: 0,
+const INPUT_SIZE = {
+  small: {
+    width: '120px',
+    height: '40px',
+  },
+  medium: {
+    width: '160px',
+    height: '50px',
+  },
+  large: {
+    width: '200px',
+    height: '60px',
+  },
 };
 
-const SolidInput = styled.input`
+const FlexLabel = styled.label`
+  display: flex;
+  align-items: center;
+  flex: ${props => props.flex === '1' && '1'};
+`;
+
+const DefaultInput = styled.input`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: ${props => (props.full ? '100%' : 'auto')};
-  min-width: ${props =>
-    (props.size === 'small' && '120px') ||
-    (props.size === 'medium' && '160px') ||
-    '200px'};
-  height: ${props =>
-    (props.size === 'small' && '40px') ||
-    (props.size === 'medium' && '50px') ||
-    '60px'};
+  opacity: 0.9;
+  width: ${props => (props.dataFull ? '100%' : 'auto')};
+  min-width: ${({ dataSize }) => INPUT_SIZE[dataSize]?.width};
+  height: ${({ dataSize }) => INPUT_SIZE[dataSize]?.height};
   border: 1px solid transparent;
-  border-radius: ${props => (props.shape === 'round' && '50px') || '0px'};
+  border-radius: ${props => props.dataShape === 'round' && '50px'};
+
   border-color: ${props =>
-    (props.color === 'primary' && props.theme.primaryColor) ||
-    (props.color === 'secondary' && props.theme.secondaryColor) ||
+    (props.dataColor === 'primary' && props.theme.primary) ||
+    (props.dataColor === 'secondary' && props.theme.secondary) ||
     props.theme.grayscaleC};
+
   background-color: ${props =>
-    (props.color === 'primary' && props.theme.primaryColor) ||
-    (props.color === 'secondary' && props.theme.secondaryColor) ||
-    props.theme.grayscaleA};
-  color: ${props =>
-    (props.color === 'primary' && props.theme.primaryColor) ||
-    (props.color === 'secondary' && props.theme.secondaryColor) ||
+    (props.dataColor === 'primary' && props.theme.primary) ||
+    (props.dataColor === 'secondary' && props.theme.secondary) ||
     props.theme.grayscaleB};
-`;
 
-const FlexLabel = styled.label`
-  flex: ${props => (props.flex === '1' && '1') || 0};
-`;
+  color: ${props =>
+    (props.dataColor === 'primary' && props.theme.primary) ||
+    (props.dataColor === 'secondary' && props.theme.secondary) ||
+    props.theme.grayscaleB};
 
+  &[dataStatus='default'] {
+    border-color: #011627;
+    color: #011627;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &[dataStatus='error'] {
+    border-color: #e71d36;
+    color: #e71d36;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &[dataStatus='done'] {
+    border-color: #2ec4b6;
+    color: #2ec4b6;
+
+    &:focus {
+      outline: none;
+    }
+  }
+`;
 export default Input;
