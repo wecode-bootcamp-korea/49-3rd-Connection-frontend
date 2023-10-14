@@ -48,6 +48,11 @@ const CHECK_BOX_SIZE = {
     fontSize: '20px',
   },
 };
+const CheckBoxLabel = styled.label`
+  display: flex;
+  position: relative;
+  user-select: none;
+`;
 
 /**
  * CheckBox Props 정의
@@ -58,12 +63,6 @@ const CHECK_BOX_SIZE = {
  * @property {boolean} disabled - 체크박스 비활성화
  * @property {string} text - 체크박스 텍스트
  */
-
-const CheckBoxLabel = styled.label`
-  display: flex;
-  position: relative;
-  user-select: none;
-`;
 
 const CheckBoxInput = styled.input`
   position: absolute;
