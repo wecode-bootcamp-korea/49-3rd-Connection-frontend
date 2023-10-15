@@ -2,36 +2,27 @@ import React from 'react';
 import styled from 'styled-components';
 
 function Input({
-  flex = 0,
   type = 'text',
-  shape = 'solid',
-  size = 'medium',
-  color = 'primary',
-  status,
-  full = false,
   name,
   value,
   defaultValue,
   onChange,
   disabled,
   placeholder,
+  ...props
 }) {
   return (
     // 인풋 Props
-    <FlexLabel flex={flex}>
+    <FlexLabel {...props}>
       <DefaultInput
         type={type}
-        dataShape={shape}
-        dataSize={size}
-        dataColor={color}
-        dataStatus={status}
-        dataFull={full}
         name={name}
         value={value}
         defaultValue={defaultValue}
         onChange={onChange}
         disabled={disabled}
         placeholder={placeholder}
+        {...props}
       />
     </FlexLabel>
   );
@@ -39,7 +30,6 @@ function Input({
 
 /**
  * Input Props 정의
- * @property {number} flex - 인풋 flex 값
  * @property {string} type - 인풋 타입
  * @property {string} dataShape - 인풋 모양 (solid, round)
  * @property {string} dataSize - 인풋 크기 (small, medium)
@@ -56,76 +46,54 @@ function Input({
 
 const INPUT_SIZE = {
   small: {
-    width: '120px',
     height: '40px',
+    fontSize: '16px',
   },
   medium: {
-    width: '160px',
     height: '50px',
+    fontSize: '20px',
   },
   large: {
-    width: '200px',
     height: '60px',
+    fontSize: '24px',
   },
 };
 
 const FlexLabel = styled.label`
   display: flex;
   align-items: center;
-  flex: ${props => props.flex === '1' && '1'};
+  flex: ${({ labelFlex }) => labelFlex || '0'};
 `;
 
 const DefaultInput = styled.input`
-  display: flex;
-  justify-content: center;
-  align-items: center;
   opacity: 0.9;
-  width: ${props => (props.dataFull ? '100%' : 'auto')};
-  min-width: ${({ dataSize }) => INPUT_SIZE[dataSize]?.width};
-  height: ${({ dataSize }) => INPUT_SIZE[dataSize]?.height};
+  width: 100%;
+  height: ${({ size }) => INPUT_SIZE[size]?.height || INPUT_SIZE.medium.height};
+  padding: 0 20px;
+  outline: none;
+  font-size: ${({ size }) =>
+    INPUT_SIZE[size]?.fontSize || INPUT_SIZE.medium.fontSize};
   border: 1px solid transparent;
-  border-radius: ${props => props.dataShape === 'round' && '50px'};
+  border-radius: ${props => props.borderRadius};
 
-  border-color: ${props =>
-    (props.dataColor === 'primary' && props.theme.primary) ||
-    (props.dataColor === 'secondary' && props.theme.secondary) ||
-    props.theme.grayscaleC};
-
-  background-color: ${props =>
-    (props.dataColor === 'primary' && props.theme.primary) ||
-    (props.dataColor === 'secondary' && props.theme.secondary) ||
-    props.theme.grayscaleB};
-
-  color: ${props =>
-    (props.dataColor === 'primary' && props.theme.primary) ||
-    (props.dataColor === 'secondary' && props.theme.secondary) ||
-    props.theme.grayscaleB};
-
-  &[dataStatus='default'] {
-    border-color: #011627;
-    color: #011627;
-
-    &:focus {
-      outline: none;
+  ${props => {
+    if (props.status === 'error') {
+      return `
+        border-color : ${props.theme.secondaryColor};
+        color : ${props.theme.secondaryColor};
+      `;
+    } else if (props.status === 'done') {
+      return `
+        border-color : ${props.theme.primaryColor};
+        color : ${props.theme.primaryColor};
+      `;
+    } else {
+      return `
+      border-color : ${props.theme.grayscaleC};
+        color : ${props.theme.grayscaleD};
+      `;
     }
-  }
-
-  &[dataStatus='error'] {
-    border-color: #e71d36;
-    color: #e71d36;
-
-    &:focus {
-      outline: none;
-    }
-  }
-
-  &[dataStatus='done'] {
-    border-color: #2ec4b6;
-    color: #2ec4b6;
-
-    &:focus {
-      outline: none;
-    }
-  }
+  }}
 `;
+
 export default Input;
