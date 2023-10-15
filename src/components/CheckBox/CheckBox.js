@@ -55,7 +55,7 @@ const CheckBoxLabel = styled.label`
 `;
 
 /**
- * CheckBox Props 정의
+ * CheckBox Props 정의중
  * @property {string} name - 체크박스 이름
  * @property {string} dataIsChecked - 체크박스 체크 여부
  * @property {string} dataSize - 체크박스 크기 (small, medium, large)
