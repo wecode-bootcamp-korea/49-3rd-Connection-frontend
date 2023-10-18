@@ -86,7 +86,7 @@ const SignUp = props => {
 
   const handleDuplicateCheck = () => {
     // 이메일 중복체크 API 실행
-    fetch('API 주소', {
+    fetch('http://10.58.52.198:8000/users/duplicate', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json;charset=utf-8',
@@ -97,7 +97,11 @@ const SignUp = props => {
     })
       .then(res => res.json())
       .then(result => {
-        console.log(result);
+        if (result.message === 'SUCCESS') {
+          alert('사용 가능한 이메일입니다.');
+        } else {
+          alert('이미 사용중인 이메일입니다.');
+        }
       });
   };
 
